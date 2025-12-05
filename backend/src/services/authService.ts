@@ -36,6 +36,7 @@ export interface AuthResponse {
 
 export interface RefreshTokenResponse {
   accessToken: string;
+  refreshToken?: string; // New refresh token if rotation is enabled
 }
 
 export class AuthService {
@@ -119,8 +120,17 @@ export class AuthService {
       throw new Error("Invalid or expired refresh token");
     }
 
+    // Token rotation: invalidate old token, issue new one
+    await sessionRepository.deleteByRefreshToken(refreshToken);
+
+    const newRefreshToken = this.generateRefreshToken();
+    await this.createSession(String(session.userId), newRefreshToken);
+
     const accessToken = this.generateAccessToken(String(session.userId));
-    return { accessToken };
+    return {
+      accessToken,
+      refreshToken: newRefreshToken, // Client must update cookie
+    };
   }
 
   async logout(refreshToken: string): Promise<void> {

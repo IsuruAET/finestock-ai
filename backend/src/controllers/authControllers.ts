@@ -102,6 +102,14 @@ export const refreshToken = async (
 
   try {
     const result = await authService.refreshAccessToken(refreshToken);
+
+    // Update refresh token cookie if rotation occurred
+    if (result.refreshToken) {
+      setRefreshTokenCookie(res, result.refreshToken);
+      const { refreshToken, ...responseData } = result;
+      return res.status(200).json(responseData);
+    }
+
     return res.status(200).json(result);
   } catch (error: unknown) {
     if (error instanceof Error) {
