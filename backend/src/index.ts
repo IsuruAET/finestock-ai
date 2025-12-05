@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express, { Application } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import { setupGracefulShutdown } from "./utils/shutdown";
 import authRoutes from "./routes/authRoutes";
@@ -28,6 +29,7 @@ const corsOptions: cors.CorsOptions = {
 app.use(cors(corsOptions));
 
 app.use(express.json());
+app.use(cookieParser());
 
 // Health check endpoint (for monitoring and keep-alive)
 app.get("/health", (req, res) => {

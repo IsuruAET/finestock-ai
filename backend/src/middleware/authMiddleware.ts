@@ -35,6 +35,9 @@ export const protect = async (
 
     next();
   } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res.status(401).json({ message: "Access token expired" });
+    }
     return res.status(401).json({ message: "Not authorized, token failed" });
   }
 };

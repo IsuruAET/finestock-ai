@@ -35,4 +35,3 @@ export const deleteObject = async (key: string): Promise<void> => {
   });
   await s3Client.send(deleteCommand);
 };
-
