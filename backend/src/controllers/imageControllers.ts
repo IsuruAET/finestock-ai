@@ -50,10 +50,7 @@ export const deleteImage = async (
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const imageId = req.params.id;
-  if (!imageId) {
-    return res.status(400).json({ message: "Image ID is required" });
-  }
+  const imageId = req.params.id as string; // Validated by Zod middleware
 
   try {
     const deleted = await imageService.deleteImage(

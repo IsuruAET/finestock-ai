@@ -29,11 +29,7 @@ export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { fullName, email, password, profileImageUrl } = req.body || {};
-
-  if (!fullName || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
+  const { fullName, email, password, profileImageUrl } = req.body;
 
   try {
     const result = await authService.register({
@@ -64,11 +60,7 @@ export const loginUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { email, password } = req.body || {};
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
-  }
+  const { email, password } = req.body;
 
   try {
     const result = await authService.login({ email, password });
