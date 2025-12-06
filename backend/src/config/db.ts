@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { logger } from "../utils/logger";
 
 // Connection configuration
 const getConnectionOptions = (): mongoose.ConnectOptions => ({
@@ -18,11 +19,11 @@ const initializeEventHandlers = () => {
 
   const connection = mongoose.connection;
 
-  connection.on("connected", () => console.log("✅ MongoDB connected"));
-  connection.on("error", (err) => console.error("❌ MongoDB error:", err));
-  connection.on("disconnected", () => console.log("⚠️ MongoDB disconnected"));
-  connection.on("reconnected", () => console.log("✅ MongoDB reconnected"));
-  connection.on("close", () => console.log("🔌 MongoDB connection closed"));
+  connection.on("connected", () => logger.info("MongoDB connected"));
+  connection.on("error", (err) => logger.error({ err }, "MongoDB error"));
+  connection.on("disconnected", () => logger.warn("MongoDB disconnected"));
+  connection.on("reconnected", () => logger.info("MongoDB reconnected"));
+  connection.on("close", () => logger.info("MongoDB connection closed"));
 
   handlersInitialized = true;
 };
@@ -69,7 +70,7 @@ export const disconnectDB = async (): Promise<void> => {
 
   await mongoose.disconnect();
   connectingPromise = null;
-  console.log("✅ MongoDB disconnected");
+  logger.info("MongoDB disconnected");
 };
 
 export default connectDB;

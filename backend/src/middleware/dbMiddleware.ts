@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import connectDB from "../config/db";
+import { logger } from "../utils/logger";
 
 const CONNECTION_TIMEOUT_MS = 5000; // Matches serverSelectionTimeoutMS in db config
 const CONNECTED_STATE = 1;
@@ -38,7 +39,7 @@ export const ensureDBConnection = async (
         ? error.message
         : "Database connection unavailable";
 
-    console.error("[DB Middleware] Connection failed:", errorMessage);
+    logger.error({ error: errorMessage }, "DB Middleware: Connection failed");
 
     res.status(503).json({
       error: "Service Unavailable",

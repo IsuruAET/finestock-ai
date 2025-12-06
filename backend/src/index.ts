@@ -4,9 +4,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db";
 import { setupGracefulShutdown } from "./utils/shutdown";
+import { logger } from "./utils/logger";
 import authRoutes from "./routes/authRoutes";
 import imageRoutes from "./routes/imageRoutes";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
+import { requestLogger } from "./middleware/loggingMiddleware";
 
 dotenv.config();
 
@@ -27,7 +29,7 @@ const corsOptions: cors.CorsOptions = {
 };
 
 app.use(cors(corsOptions));
-
+app.use(requestLogger);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -42,7 +44,7 @@ app.get("/health", (req, res) => {
 
 // Connect to database - non-blocking
 connectDB().catch((err) => {
-  console.error("Failed to connect to database:", err);
+  logger.fatal({ err }, "Failed to connect to database");
 });
 
 app.use("/api/v1/auth", authRoutes);
@@ -57,7 +59,7 @@ app.use(errorHandler);
 const PORT: number = Number(process.env.PORT) || 5000;
 
 const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  logger.info({ port: PORT }, "Server started");
 });
 
 setupGracefulShutdown(server);

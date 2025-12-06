@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { logger } from "../utils/logger";
 
 // Custom Error class with status code
 export class AppError extends Error {
@@ -53,13 +54,25 @@ export const errorHandler = (
     }
   }
 
-  // Log error in development
-  if (process.env.NODE_ENV === "development") {
-    console.error("Error:", {
-      message: err.message,
-      stack: err.stack,
-      statusCode,
-    });
+  // Log errors that need investigation:
+  // - All 5xx errors (server errors)
+  // - Unexpected errors (non-AppError) that might indicate bugs
+  // Skip expected 4xx AppErrors as pinoHttp already logs them
+  const shouldLog =
+    statusCode >= 500 || (statusCode >= 400 && !(err instanceof AppError));
+
+  if (shouldLog) {
+    logger.error(
+      {
+        err,
+        message: err.message,
+        stack: err.stack,
+        statusCode,
+        path: req.path,
+        method: req.method,
+      },
+      "Request error"
+    );
   }
 
   // Send error response
@@ -85,10 +98,6 @@ export const notFoundHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const error = new AppError(
-    `Route ${req.originalUrl} not found`,
-    404
-  );
+  const error = new AppError(`Route ${req.originalUrl} not found`, 404);
   next(error);
 };
-
