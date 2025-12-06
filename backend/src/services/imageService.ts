@@ -8,7 +8,7 @@ export class ImageService {
     return {
       id: String(image._id),
       imageUrl: image.url,
-      imageType: image.imageType || "general",
+      imageType: image.imageType || "GENERAL",
     };
   }
 

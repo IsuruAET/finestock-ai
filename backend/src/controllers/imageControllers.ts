@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../types";
+import { AuthenticatedRequest, ImageType } from "../types";
 import imageService from "../services/imageService";
 
 // Upload Image
@@ -17,7 +17,7 @@ export const uploadImage = async (
 
   try {
     const file = req.file as Express.MulterS3.File;
-    const imageType = (req.body.imageType as string) || "GENERAL";
+    const imageType = (req.body.imageType as ImageType) || "GENERAL";
 
     const imageResponse = await imageService.createImage({
       userId: String(req.user._id),

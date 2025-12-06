@@ -9,7 +9,11 @@ const ImageSchema = new Schema<IImage>(
     filename: { type: String, required: true },
     size: { type: Number, required: true },
     mimeType: { type: String, required: true },
-    imageType: { type: String, default: "general" },
+    imageType: {
+      type: String,
+      enum: ["GENERAL", "PROFILE", "DOCUMENT"],
+      default: "GENERAL",
+    },
   },
   { timestamps: true }
 );

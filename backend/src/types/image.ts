@@ -1,4 +1,6 @@
-// Image Request Types
+import { ImageType } from "./models";
+
+// Image Request Types (explicit fields for clarity, derived from IImage model)
 export interface CreateImageData {
   userId: string;
   s3Key: string;
@@ -6,13 +8,13 @@ export interface CreateImageData {
   filename: string;
   size: number;
   mimeType: string;
-  imageType?: string;
+  imageType?: ImageType;
 }
 
 // Image Response Types
 export interface ImageResponse {
   id: string;
   imageUrl: string;
-  imageType: string;
+  imageType: ImageType;
 }
 

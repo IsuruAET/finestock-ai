@@ -1,6 +1,9 @@
 import { Document } from "mongoose";
 import mongoose from "mongoose";
 
+// Image Type Enum (shared between validation, models, and services)
+export type ImageType = "GENERAL" | "PROFILE" | "DOCUMENT";
+
 // User Model
 export interface IUser extends Document {
   fullName: string;
@@ -10,7 +13,7 @@ export interface IUser extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-// Image Model
+// Image Model (using shared ImageType)
 export interface IImage extends Document {
   userId: mongoose.Types.ObjectId;
   s3Key: string;
@@ -18,7 +21,7 @@ export interface IImage extends Document {
   filename: string;
   size: number;
   mimeType: string;
-  imageType?: "PROFILE" | "ITEM" | "GENERAL";
+  imageType?: ImageType;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,4 +35,3 @@ export interface ISession extends Document {
   createdAt: Date;
   compareRefreshToken(candidateToken: string): Promise<boolean>;
 }
-
