@@ -25,12 +25,12 @@ export const registerSchema = z.object({
     email: emailSchema,
     password: passwordSchema,
     profileImageUrl: z.url("Invalid URL format").optional().nullable(),
-  }),
+  }).strict(),
 });
 
 export const loginSchema = z.object({
   body: z.object({
     email: emailSchema,
     password: z.string().min(1, "Password is required"),
-  }),
+  }).strict(),
 });

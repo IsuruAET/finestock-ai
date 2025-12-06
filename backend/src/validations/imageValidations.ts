@@ -9,11 +9,11 @@ export const imageTypeSchema = z.enum(["GENERAL", "PROFILE", "DOCUMENT"], {
 export const uploadImageSchema = z.object({
   body: z.object({
     imageType: imageTypeSchema.optional().default("GENERAL"),
-  }),
+  }).strict(),
 });
 
 export const deleteImageSchema = z.object({
   params: z.object({
     id: mongoIdSchema,
-  }),
+  }).strict(),
 });
