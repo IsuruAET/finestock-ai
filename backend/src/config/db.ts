@@ -14,15 +14,26 @@ const getConnectionOptions = (): mongoose.ConnectOptions => ({
 
 // Setup event handlers (runs once)
 let handlersInitialized = false;
+let hasBeenConnected = false; // Track if we've ever been connected before
+
 const initializeEventHandlers = () => {
   if (handlersInitialized) return;
 
   const connection = mongoose.connection;
 
-  connection.on("connected", () => logger.info("MongoDB connected"));
+  connection.on("connected", () => {
+    if (!hasBeenConnected) {
+      logger.info("MongoDB connected");
+      hasBeenConnected = true;
+    }
+  });
   connection.on("error", (err) => logger.error({ err }, "MongoDB error"));
   connection.on("disconnected", () => logger.warn("MongoDB disconnected"));
-  connection.on("reconnected", () => logger.info("MongoDB reconnected"));
+  connection.on("reconnected", () => {
+    if (hasBeenConnected) {
+      logger.info("MongoDB reconnected");
+    }
+  });
   connection.on("close", () => logger.info("MongoDB connection closed"));
 
   handlersInitialized = true;

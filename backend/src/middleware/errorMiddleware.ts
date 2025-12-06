@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { logger } from "../utils/logger";
 
 // Custom Error class with status code
 export class AppError extends Error {
@@ -54,26 +53,8 @@ export const errorHandler = (
     }
   }
 
-  // Log errors that need investigation:
-  // - All 5xx errors (server errors)
-  // - Unexpected errors (non-AppError) that might indicate bugs
-  // Skip expected 4xx AppErrors as pinoHttp already logs them
-  const shouldLog =
-    statusCode >= 500 || (statusCode >= 400 && !(err instanceof AppError));
-
-  if (shouldLog) {
-    logger.error(
-      {
-        err,
-        message: err.message,
-        stack: err.stack,
-        statusCode,
-        path: req.path,
-        method: req.method,
-      },
-      "Request error"
-    );
-  }
+  // Attach error to response for pinoHttp to log
+  res.locals.err = err;
 
   // Send error response
   res.status(statusCode).json({

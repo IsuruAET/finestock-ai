@@ -15,7 +15,9 @@ export const requestLogger = pinoHttp({
     return `${req.method} ${req.url} - ${res.statusCode}`;
   },
   customErrorMessage: (req, res, err) => {
-    return `${req.method} ${req.url} - ${res.statusCode || 500} (${err?.message || "error"})`;
+    return `${req.method} ${req.url} - ${res.statusCode || 500} (${
+      err?.message || "error"
+    })`;
   },
   autoLogging: {
     ignore: (req) => req.url === "/health",
@@ -35,6 +37,13 @@ export const requestLogger = pinoHttp({
     res: (res) => ({
       statusCode: res.statusCode,
     }),
+    err: (err) => ({
+      type: err?.constructor?.name || "Error",
+      name: err?.name,
+      message: err?.message,
+      stack: err?.stack,
+      statusCode: err?.statusCode,
+      isOperational: err?.isOperational,
+    }),
   },
 });
-
