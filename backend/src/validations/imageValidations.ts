@@ -17,8 +17,3 @@ export const deleteImageSchema = z.object({
     id: mongoIdSchema,
   }),
 });
-
-// Type exports for TypeScript inference
-export type UploadImageInput = z.infer<typeof uploadImageSchema>["body"];
-export type DeleteImageParams = z.infer<typeof deleteImageSchema>["params"];
-

@@ -1,14 +1,5 @@
 import Image, { IImage } from "../models/Image";
-
-export interface CreateImageData {
-  userId: string;
-  s3Key: string;
-  url: string;
-  filename: string;
-  size: number;
-  mimeType: string;
-  imageType?: string;
-}
+import { CreateImageData } from "../types";
 
 export class ImageRepository {
   async create(data: CreateImageData): Promise<IImage> {

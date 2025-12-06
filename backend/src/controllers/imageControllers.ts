@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { AuthenticatedRequest } from "../types/express";
+import { AuthenticatedRequest } from "../types";
 import imageService from "../services/imageService";
 
 // Upload Image

@@ -1,21 +1,6 @@
 import imageRepository from "../repositories/imageRepository";
 import { deleteObject } from "../utils/s3Util";
-
-export interface CreateImageData {
-  userId: string;
-  s3Key: string;
-  url: string;
-  filename: string;
-  size: number;
-  mimeType: string;
-  imageType?: string;
-}
-
-export interface ImageResponse {
-  id: string;
-  imageUrl: string;
-  imageType: string;
-}
+import { CreateImageData, ImageResponse } from "../types";
 
 export class ImageService {
   async createImage(data: CreateImageData): Promise<ImageResponse> {

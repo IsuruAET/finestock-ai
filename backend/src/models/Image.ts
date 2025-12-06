@@ -1,16 +1,5 @@
-import mongoose, { Document, Schema } from "mongoose";
-
-export interface IImage extends Document {
-  userId: mongoose.Types.ObjectId;
-  s3Key: string;
-  url: string;
-  filename: string;
-  size: number;
-  mimeType: string;
-  imageType?: "PROFILE" | "ITEM" | "GENERAL";
-  createdAt: Date;
-  updatedAt: Date;
-}
+import mongoose, { Schema } from "mongoose";
+import { IImage } from "../types/models";
 
 const ImageSchema = new Schema<IImage>(
   {
@@ -30,3 +19,4 @@ ImageSchema.index({ userId: 1, imageType: 1 });
 
 const Image = mongoose.model<IImage>("Image", ImageSchema);
 export default Image;
+export { IImage }; // Re-export for backward compatibility

@@ -1,14 +1,6 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
-
-// Define the user interface
-export interface IUser extends Document {
-  fullName: string;
-  email: string;
-  password: string;
-  profileImageUrl?: string | null;
-  comparePassword(candidatePassword: string): Promise<boolean>;
-}
+import { IUser } from "../types/models";
 
 // Define schema
 const UserSchema = new Schema<IUser>(
@@ -37,3 +29,4 @@ UserSchema.methods.comparePassword = async function (
 // Export model
 const User = mongoose.model<IUser>("User", UserSchema);
 export default User;
+export { IUser }; // Re-export for backward compatibility

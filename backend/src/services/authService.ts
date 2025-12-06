@@ -1,9 +1,15 @@
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import mongoose from "mongoose";
 import userRepository from "../repositories/userRepository";
 import sessionRepository from "../repositories/sessionRepository";
-import { IUser } from "../models/User";
-import mongoose from "mongoose";
+import {
+  IUser,
+  RegisterData,
+  LoginData,
+  AuthResponse,
+  RefreshTokenResponse,
+} from "../types";
 
 const JWT_SECRET: string = process.env.JWT_SECRET || "";
 if (!JWT_SECRET) {
@@ -14,30 +20,6 @@ const ACCESS_TOKEN_EXPIRY: string = process.env.ACCESS_TOKEN_EXPIRY || "15m";
 const REFRESH_TOKEN_EXPIRY_DAYS = parseInt(
   process.env.REFRESH_TOKEN_EXPIRY_DAYS || "7"
 );
-
-export interface RegisterData {
-  fullName: string;
-  email: string;
-  password: string;
-  profileImageUrl?: string | null;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  id: string;
-  user: Omit<IUser, "password">;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface RefreshTokenResponse {
-  accessToken: string;
-  refreshToken?: string; // New refresh token if rotation is enabled
-}
 
 export class AuthService {
   private generateAccessToken(id: string): string {

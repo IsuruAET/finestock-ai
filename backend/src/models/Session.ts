@@ -1,15 +1,7 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
-
-export interface ISession extends Document {
-  userId: mongoose.Types.ObjectId;
-  refreshToken: string; // Bcrypt hashed token stored here
-  tokenIdentifier: string; // HMAC-SHA256 of token for fast lookup (indexed)
-  expiresAt: Date;
-  createdAt: Date;
-  compareRefreshToken(candidateToken: string): Promise<boolean>;
-}
+import { ISession } from "../types/models";
 
 const TOKEN_IDENTIFIER_SECRET =
   process.env.TOKEN_IDENTIFIER_SECRET || process.env.JWT_SECRET || "";
@@ -58,3 +50,4 @@ SessionSchema.methods.compareRefreshToken = async function (
 
 const Session = mongoose.model<ISession>("Session", SessionSchema);
 export default Session;
+export { ISession }; // Re-export for backward compatibility

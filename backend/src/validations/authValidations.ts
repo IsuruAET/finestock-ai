@@ -34,7 +34,3 @@ export const loginSchema = z.object({
     password: z.string().min(1, "Password is required"),
   }),
 });
-
-// Type exports for TypeScript inference
-export type RegisterInput = z.infer<typeof registerSchema>["body"];
-export type LoginInput = z.infer<typeof loginSchema>["body"];

@@ -1,4 +1,5 @@
 import User, { IUser } from "../models/User";
+import { RegisterData } from "../types";
 
 export class UserRepository {
   async findByEmail(email: string): Promise<IUser | null> {
@@ -9,12 +10,7 @@ export class UserRepository {
     return await User.findById(id).select("-password");
   }
 
-  async create(userData: {
-    fullName: string;
-    email: string;
-    password: string;
-    profileImageUrl?: string | null;
-  }): Promise<IUser> {
+  async create(userData: RegisterData): Promise<IUser> {
     return await User.create(userData);
   }
 

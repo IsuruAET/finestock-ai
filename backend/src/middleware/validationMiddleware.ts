@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
 import { AppError } from "./errorMiddleware";
-
-type ValidationTarget = "body" | "query" | "params";
+import { ValidationTarget } from "../types";
 
 export const validate = (
   schema: z.ZodObject<Partial<Record<ValidationTarget, z.ZodTypeAny>>>
@@ -30,7 +29,7 @@ export const validate = (
       next();
     } catch (error: unknown) {
       if (error instanceof ZodError) {
-        const errors = error.issues.map((err: z.ZodIssue) => ({
+        const errors = error.issues.map((err) => ({
           field: err.path.join("."),
           message: err.message,
         }));

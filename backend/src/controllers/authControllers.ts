@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AuthenticatedRequest } from "../types/express";
+import { AuthenticatedRequest } from "../types";
 import authService from "../services/authService";
 
 const REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
