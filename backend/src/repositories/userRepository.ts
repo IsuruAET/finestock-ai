@@ -18,6 +18,17 @@ export class UserRepository {
     const user = await User.findOne({ email });
     return !!user;
   }
+
+  async update(
+    id: string,
+    updateData: Partial<Pick<IUser, "fullName" | "profileImageUrl">>
+  ): Promise<IUser | null> {
+    return await User.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    ).select("-password");
+  }
 }
 
 export default new UserRepository();

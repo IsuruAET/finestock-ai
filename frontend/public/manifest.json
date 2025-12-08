@@ -1,0 +1,25 @@
+{
+  "name": "FineStock AI",
+  "short_name": "FineStock AI",
+  "description": "FineStock AI is an AI-powered system that predicts supply needs, streamlines request workflows, automates approvals, reduces delays, and ensures accurate, real-time inventory management.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fcfcfc",
+  "theme_color": "#1B3182",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

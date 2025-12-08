@@ -25,18 +25,17 @@ const clearRefreshTokenCookie = (res: Response): void => {
 };
 
 // Register User
-export const registerUser = async (
+export const register = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { fullName, email, password, profileImageUrl } = req.body;
+  const { fullName, email, password } = req.body;
 
   try {
     const result = await authService.register({
       fullName,
       email,
       password,
-      profileImageUrl,
     });
 
     setRefreshTokenCookie(res, result.refreshToken);
@@ -56,10 +55,7 @@ export const registerUser = async (
 };
 
 // Login User
-export const loginUser = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
+export const login = async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body;
 
   try {
@@ -117,7 +113,7 @@ export const refreshToken = async (
 };
 
 // Logout User
-export const logoutUser = async (
+export const logout = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
@@ -136,7 +132,7 @@ export const logoutUser = async (
 };
 
 // Get User Information
-export const getUserInfo = async (
+export const getProfile = async (
   req: AuthenticatedRequest,
   res: Response
 ): Promise<Response> => {
@@ -157,6 +153,38 @@ export const getUserInfo = async (
       return res
         .status(500)
         .json({ message: "Error fetching user info", error: error.message });
+    }
+    return res.status(500).json({ message: "Unknown error occurred" });
+  }
+};
+
+// Update User Profile
+export const updateProfile = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<Response> => {
+  try {
+    if (!req.user?._id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { fullName, profileImageUrl } = req.body;
+
+    const updatedUser = await authService.updateProfile(String(req.user._id), {
+      fullName,
+      profileImageUrl,
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(updatedUser);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return res
+        .status(500)
+        .json({ message: "Error updating profile", error: error.message });
     }
     return res.status(500).json({ message: "Unknown error occurred" });
   }

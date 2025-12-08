@@ -1,21 +1,32 @@
 import { Router } from "express";
 import {
-  registerUser,
-  loginUser,
+  register,
+  login,
   refreshToken,
-  logoutUser,
-  getUserInfo,
+  logout,
+  getProfile,
+  updateProfile,
 } from "../controllers/authControllers";
 import { protectedRoute, publicRoute } from "../middleware/commonMiddleware";
 import { validate } from "../middleware/validationMiddleware";
-import { registerSchema, loginSchema } from "../validations/authValidations";
+import {
+  registerSchema,
+  loginSchema,
+  updateProfileSchema,
+} from "../validations/authValidations";
 
 const router = Router();
 
-router.post("/register", ...publicRoute, validate(registerSchema), registerUser);
-router.post("/login", ...publicRoute, validate(loginSchema), loginUser);
+router.post("/register", ...publicRoute, validate(registerSchema), register);
+router.post("/login", ...publicRoute, validate(loginSchema), login);
 router.post("/refresh-token", ...publicRoute, refreshToken);
-router.post("/logout", ...publicRoute, logoutUser);
-router.get("/getUser", ...protectedRoute, getUserInfo);
+router.post("/logout", ...publicRoute, logout);
+router.get("/me", ...protectedRoute, getProfile);
+router.put(
+  "/me",
+  ...protectedRoute,
+  validate(updateProfileSchema),
+  updateProfile
+);
 
 export default router;

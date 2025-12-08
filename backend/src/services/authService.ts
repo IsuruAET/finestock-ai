@@ -122,6 +122,13 @@ export class AuthService {
   async getUserInfo(userId: string): Promise<IUser | null> {
     return await userRepository.findById(userId);
   }
+
+  async updateProfile(
+    userId: string,
+    data: { fullName?: string; profileImageUrl?: string | null }
+  ): Promise<IUser | null> {
+    return await userRepository.update(userId, data);
+  }
 }
 
 export default new AuthService();
