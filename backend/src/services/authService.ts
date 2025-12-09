@@ -46,6 +46,12 @@ export class AuthService {
     });
   }
 
+  private computeSessionExpiry(): Date {
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + REFRESH_TOKEN_EXPIRY_DAYS);
+    return expiresAt;
+  }
+
   async register(data: RegisterData): Promise<AuthResponse> {
     const existingUser = await userRepository.findByEmail(data.email);
     if (existingUser) {
@@ -93,7 +99,8 @@ export class AuthService {
   async refreshAccessToken(
     refreshToken: string
   ): Promise<RefreshTokenResponse> {
-    const session = await sessionRepository.findByRefreshToken(refreshToken);
+    const { session, reused } =
+      await sessionRepository.findByRefreshToken(refreshToken);
 
     if (!session || session.expiresAt < new Date()) {
       if (session) {
@@ -102,11 +109,16 @@ export class AuthService {
       throw new Error("Invalid or expired refresh token");
     }
 
-    // Token rotation: invalidate old token, issue new one
-    await sessionRepository.deleteByRefreshToken(refreshToken);
+    if (reused) {
+      // Reuse detected: revoke this session entirely
+      await sessionRepository.deleteByRefreshToken(refreshToken);
+      throw new Error("Refresh token reuse detected");
+    }
 
+    // Token rotation with reuse detection: update same session
     const newRefreshToken = this.generateRefreshToken();
-    await this.createSession(String(session.userId), newRefreshToken);
+    const newExpiry = this.computeSessionExpiry();
+    await sessionRepository.rotateSession(session, newRefreshToken, newExpiry);
 
     const accessToken = this.generateAccessToken(String(session.userId));
     return {

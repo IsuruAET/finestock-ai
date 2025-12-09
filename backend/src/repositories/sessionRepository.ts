@@ -14,25 +14,34 @@ export class SessionRepository {
     return await Session.create(data);
   }
 
-  async findByRefreshToken(refreshToken: string): Promise<ISession | null> {
+  async findByRefreshToken(
+    refreshToken: string
+  ): Promise<{ session: ISession | null; reused: boolean }> {
     // Generate HMAC identifier for fast lookup
     const tokenIdentifier = crypto
       .createHmac("sha256", TOKEN_IDENTIFIER_SECRET)
       .update(refreshToken)
       .digest("hex");
 
-    const session = await Session.findOne({ tokenIdentifier });
+    // Try current or previous identifier to detect reuse
+    const session = await Session.findOne({
+      $or: [{ tokenIdentifier }, { previousTokenIdentifier: tokenIdentifier }],
+    });
 
-    if (!session) return null;
+    if (!session) return { session: null, reused: false };
 
-    // Verify the full token matches (defense in depth)
-    const isValid = await session.compareRefreshToken(refreshToken);
-    return isValid ? session : null;
+    const isCurrent = await session.compareRefreshToken(refreshToken);
+    if (isCurrent) return { session, reused: false };
+
+    const isPrevious = await session.comparePreviousRefreshToken(refreshToken);
+    if (isPrevious) return { session, reused: true };
+
+    return { session: null, reused: false };
   }
 
   async deleteByRefreshToken(refreshToken: string): Promise<void> {
     // Find session first to get the ID, then delete
-    const session = await this.findByRefreshToken(refreshToken);
+    const { session } = await this.findByRefreshToken(refreshToken);
     if (session) {
       await Session.deleteOne({ _id: session._id });
     }
@@ -44,6 +53,21 @@ export class SessionRepository {
 
   async deleteExpiredTokens(): Promise<void> {
     await Session.deleteMany({ expiresAt: { $lt: new Date() } });
+  }
+
+  async rotateSession(
+    session: ISession,
+    newRefreshToken: string,
+    expiresAt: Date
+  ): Promise<ISession> {
+    // Preserve previous token hash and identifier to detect reuse
+    session.previousTokenHash = session.refreshToken;
+    session.previousTokenIdentifier = session.tokenIdentifier;
+    session.refreshToken = newRefreshToken;
+    session.expiresAt = expiresAt;
+    // Explicitly mark as modified to ensure pre-save hook runs
+    session.markModified("refreshToken");
+    return session.save();
   }
 }
 

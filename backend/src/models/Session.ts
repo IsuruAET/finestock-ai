@@ -21,6 +21,8 @@ const SessionSchema = new Schema<ISession>(
       unique: true,
       index: true,
     },
+    previousTokenHash: { type: String, required: false },
+    previousTokenIdentifier: { type: String, required: false },
     expiresAt: { type: Date, required: true, index: { expireAfterSeconds: 0 } },
   },
   { timestamps: true }
@@ -28,16 +30,21 @@ const SessionSchema = new Schema<ISession>(
 
 // Hash refresh token before saving and generate HMAC identifier
 SessionSchema.pre<ISession>("save", async function () {
-  // Always generate tokenIdentifier if it doesn't exist or if refreshToken is modified
-  if (this.isModified("refreshToken") || !this.tokenIdentifier || this.isNew) {
+  if (this.isModified("refreshToken")) {
+    // refreshToken currently holds the new plain token; tokenIdentifier will reflect it
     const plainToken = this.refreshToken;
-    // Generate HMAC-SHA256 identifier for fast, secure lookup
     this.tokenIdentifier = crypto
       .createHmac("sha256", TOKEN_IDENTIFIER_SECRET)
       .update(plainToken)
       .digest("hex");
-    // Bcrypt hash for secure storage (prevents DB admin from reading tokens)
     this.refreshToken = await bcrypt.hash(plainToken, 10);
+  } else if (!this.tokenIdentifier || this.isNew) {
+    // Ensure identifier exists even if refreshToken wasn't marked modified (safety)
+    const plainToken = this.refreshToken;
+    this.tokenIdentifier = crypto
+      .createHmac("sha256", TOKEN_IDENTIFIER_SECRET)
+      .update(plainToken)
+      .digest("hex");
   }
 });
 
@@ -46,6 +53,14 @@ SessionSchema.methods.compareRefreshToken = async function (
   candidateToken: string
 ): Promise<boolean> {
   return bcrypt.compare(candidateToken, this.refreshToken);
+};
+
+// Compare previous refresh token (for reuse detection)
+SessionSchema.methods.comparePreviousRefreshToken = async function (
+  candidateToken: string
+): Promise<boolean> {
+  if (!this.previousTokenHash) return false;
+  return bcrypt.compare(candidateToken, this.previousTokenHash);
 };
 
 const Session = mongoose.model<ISession>("Session", SessionSchema);

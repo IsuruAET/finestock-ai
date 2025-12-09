@@ -31,7 +31,10 @@ export interface ISession extends Document {
   userId: mongoose.Types.ObjectId;
   refreshToken: string;
   tokenIdentifier: string;
+  previousTokenHash?: string | null;
+  previousTokenIdentifier?: string | null;
   expiresAt: Date;
   createdAt: Date;
   compareRefreshToken(candidateToken: string): Promise<boolean>;
+  comparePreviousRefreshToken(candidateToken: string): Promise<boolean>;
 }
