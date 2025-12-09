@@ -18,6 +18,7 @@ type InputProps<T extends FieldValues> = Omit<
   type?: string;
   name?: FieldPath<T>;
   control?: Control<T>;
+  icon?: React.ReactNode;
 };
 
 const Input = <T extends FieldValues>({
@@ -55,6 +56,7 @@ type InputInnerProps = Omit<
   label?: string;
   type?: string;
   error?: string;
+  icon?: React.ReactNode;
 };
 
 const InputInner = forwardRef<HTMLInputElement, InputInnerProps>(
@@ -68,6 +70,7 @@ const InputInner = forwardRef<HTMLInputElement, InputInnerProps>(
       required = false,
       disabled = false,
       error,
+      icon,
       ...rest
     },
     ref
@@ -136,17 +139,26 @@ const InputInner = forwardRef<HTMLInputElement, InputInnerProps>(
         )}
 
         <div className="relative">
+          {icon && (
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center z-10">
+              {icon}
+            </div>
+          )}
           <input
             ref={setRefs}
             type={isPassword ? (showPassword ? "text" : "password") : type}
             placeholder={placeholder}
-            className={`w-full px-4 py-2 border rounded-lg outline-none transition-colors ${
+            className={`w-full py-2.5 border rounded-lg outline-none transition-colors leading-normal ${
+              icon ? "pl-10 pr-4" : "px-4"
+            } ${
               error
                 ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                 : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-            } ${
-              disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"
-            } ${isNumber ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" : ""}`}
+            } ${disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"} ${
+              isNumber
+                ? "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                : ""
+            }`}
             value={value}
             onChange={onChange}
             onWheel={isNumber ? handleWheel : undefined}
@@ -160,7 +172,7 @@ const InputInner = forwardRef<HTMLInputElement, InputInnerProps>(
             <button
               type="button"
               onClick={toggleShowPassword}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none cursor-pointer"
               tabIndex={-1}
             >
               {showPassword ? (
@@ -180,4 +192,3 @@ const InputInner = forwardRef<HTMLInputElement, InputInnerProps>(
 InputInner.displayName = "InputInner";
 
 export default Input;
-
