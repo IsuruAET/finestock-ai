@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
@@ -9,7 +9,6 @@ import type { AuthError } from "../../types/auth";
 import { useLoginMutation } from "../../api/services/auth-service";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const loginMutation = useLoginMutation();
 
   const { handleSubmit, control } = useForm<LoginFormData>({
@@ -25,7 +24,6 @@ const LoginPage = () => {
       const response = await loginMutation.mutateAsync(data);
       if (response.accessToken) {
         toast.success("Login successful!");
-        navigate("/dashboard");
       }
     } catch (error: unknown) {
       const message =

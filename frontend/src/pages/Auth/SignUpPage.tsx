@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
@@ -12,7 +12,6 @@ import type { AuthError } from "../../types/auth";
 import { useRegisterMutation } from "../../api/services/auth-service";
 
 const SignUpPage = () => {
-  const navigate = useNavigate();
   const registerMutation = useRegisterMutation();
 
   const { handleSubmit, control } = useForm<RegisterFormData>({
@@ -29,7 +28,6 @@ const SignUpPage = () => {
       const response = await registerMutation.mutateAsync(data);
       if (response.accessToken) {
         toast.success("Account created successfully!");
-        navigate("/dashboard");
       }
     } catch (error: unknown) {
       const message =

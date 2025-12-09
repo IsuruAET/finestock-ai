@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
+import type React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { X, Menu } from "lucide-react";
-import logo from "../../assets/images/logo.svg";
+import { X, Menu, FileText } from "lucide-react";
 import ProfileMenu from "../layout/ProfileMenu";
 import Button from "../ui/Button";
+import { useAuthContext } from "../../context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { user, isAuthenticated, logout } = useAuthContext();
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const isAuthenticated = true;
-  const user = { name: "John Doe", email: "john.doe@example.com" };
-  const logout = () => {};
 
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
 
@@ -35,7 +33,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-blue-900 rounded-md flex items-center justify-center">
-              <img src={logo} alt="logo" className="w-4 h-4 text-white" />
+              <FileText className="w-4 h-4 text-white" />
             </div>
             <span className="text-xl font-bold text-gray-900">
               FineStock AI
@@ -69,8 +67,8 @@ const Header = () => {
                   e.stopPropagation();
                   setProfileMenuOpen(!profileMenuOpen);
                 }}
-                avatar={user?.avatar || ""}
-                companyName={user?.name || ""}
+                avatar={user?.profileImageUrl || ""}
+                companyName={user?.fullName || ""}
                 email={user?.email || ""}
                 onLogout={logout}
               />

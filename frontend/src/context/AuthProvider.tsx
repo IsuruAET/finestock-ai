@@ -2,6 +2,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -46,6 +47,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<AuthError | null>(null);
   const [profileEnabled, setProfileEnabled] = useState(false);
+  // Prevent double invocation in React.StrictMode
+  const hasHydratedRef = useRef(false);
 
   // Use hooks from API builder
   const refreshTokenMutation = useRefreshTokenMutation();
@@ -195,6 +198,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     // Hydrate auth state once on first render to avoid repeated refresh calls
+    if (hasHydratedRef.current) return;
+    hasHydratedRef.current = true;
     checkAuthStatus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
