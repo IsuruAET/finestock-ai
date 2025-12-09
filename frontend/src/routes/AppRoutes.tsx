@@ -28,14 +28,14 @@ const AppRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* Public routes */}
-        <PublicRoute>
+        <Route element={<PublicRoute />}>
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<LoginPage />} />
-        </PublicRoute>
+        </Route>
 
         {/* Protected routes */}
-        <ProtectedRoute>
+        <Route element={<ProtectedRoute />}>
           {/* Dashboard routes */}
           <Route path="/dashboard" element={<DashboardPage />} />
 
@@ -46,7 +46,7 @@ const AppRoutes = () => {
 
           {/* Profile routes */}
           <Route path="/profile" element={<ProfilePage />} />
-        </ProtectedRoute>
+        </Route>
 
         {/* Catch-all */}
         <Route path="*" element={<NotFound />} />

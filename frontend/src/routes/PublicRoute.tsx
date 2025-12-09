@@ -2,11 +2,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthContext } from "../context/AuthContext";
 import PageLoader from "../components/Loader/PageLoader";
 
-interface PublicRouteProps {
-  children: React.ReactNode;
-}
-
-const PublicRoute = ({ children }: PublicRouteProps) => {
+const PublicRoute = ({ children }: { children?: React.ReactNode }) => {
   const location = useLocation();
   const { user, isLoading, isAuthenticated } = useAuthContext();
 

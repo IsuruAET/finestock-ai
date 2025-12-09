@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { X, Menu } from "lucide-react";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/images/logo.svg";
 import ProfileMenu from "../layout/ProfileMenu";
 import Button from "../ui/Button";
 

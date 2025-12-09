@@ -194,9 +194,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   useEffect(() => {
-    // Hydrate auth state on first render
+    // Hydrate auth state once on first render to avoid repeated refresh calls
     checkAuthStatus();
-  }, [checkAuthStatus]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // Keep axios default header in sync with the access token

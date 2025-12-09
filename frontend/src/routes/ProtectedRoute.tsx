@@ -3,11 +3,7 @@ import { useAuthContext } from "../context/AuthContext";
 import PageLoader from "../components/Loader/PageLoader";
 import DashboardLayout from "../components/layout/DashboardLayout";
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+const ProtectedRoute = ({ children }: { children?: React.ReactNode }) => {
   const location = useLocation();
   const { user, isLoading, isAuthenticated, error } = useAuthContext();
 
