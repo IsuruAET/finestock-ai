@@ -9,11 +9,11 @@ import {
   type RegisterFormData,
 } from "../../schemas/authSchemas";
 import type { AuthError } from "../../types/auth";
-import { useRegister } from "../../hooks/useAuth";
+import { useRegisterMutation } from "../../api/services/auth-service";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const registerMutation = useRegister();
+  const registerMutation = useRegisterMutation();
 
   const { handleSubmit, control } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),

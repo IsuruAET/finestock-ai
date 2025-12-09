@@ -8,13 +8,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 import {
-  fetchProfileRequest,
-  loginRequest,
-  logoutRequest,
-  refreshTokenRequest,
-  registerRequest,
-  updateProfileRequest,
-} from "../hooks/useAuth";
+  useRefreshTokenMutation,
+  useGetProfileQuery,
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useUpdateProfileMutation,
+} from "../api/services/auth-service";
 import axiosInstance from "../utils/axioInstance";
 import type { AuthError, AuthResponse, User } from "../types/auth";
 import type {
@@ -45,27 +45,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<AuthError | null>(null);
+  const [profileEnabled, setProfileEnabled] = useState(false);
+
+  // Use hooks from API builder
+  const refreshTokenMutation = useRefreshTokenMutation();
+  const profileQuery = useGetProfileQuery({ enabled: profileEnabled });
+  const loginMutation = useLoginMutation();
+  const registerMutation = useRegisterMutation();
+  const logoutMutation = useLogoutMutation();
+  const updateProfileMutation = useUpdateProfileMutation();
 
   const refreshToken = useCallback(async (): Promise<string | null> => {
     try {
-      const newToken = await refreshTokenRequest();
-      setAccessToken(newToken);
-      setAuthHeader(newToken);
+      const result = await refreshTokenMutation.mutateAsync();
+      setAccessToken(result.accessToken);
+      setAuthHeader(result.accessToken);
       setError(null);
-      return newToken;
+      setProfileEnabled(true); // Enable profile query after token refresh
+      return result.accessToken;
     } catch {
       setAccessToken(null);
       setUser(null);
+      setProfileEnabled(false);
       clearAuthHeader();
       setError({ message: "Unable to refresh session" });
       return null;
     }
-  }, []);
-
-  const fetchProfile = useCallback(async () => {
-    const profile = await fetchProfileRequest();
-    return profile;
-  }, []);
+  }, [refreshTokenMutation]);
 
   const checkAuthStatus = useCallback(async (): Promise<User | null> => {
     setIsLoading(true);
@@ -73,69 +79,118 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const token = await refreshToken();
       if (!token) {
         setUser(null);
+        setIsLoading(false);
         return null;
       }
-      const profile = await fetchProfile();
-      setUser(profile);
-      setError(null);
-      return profile;
+      // Wait for profile query to complete
+      if (profileQuery.data) {
+        setUser(profileQuery.data);
+        setError(null);
+        setIsLoading(false);
+        return profileQuery.data;
+      }
+      // If no data yet, wait a bit and refetch
+      const profileData = await profileQuery.refetch();
+      if (profileData.data) {
+        setUser(profileData.data);
+        setError(null);
+        setIsLoading(false);
+        return profileData.data;
+      }
+      setIsLoading(false);
+      return null;
     } catch {
       setUser(null);
       setError({ message: "Authentication check failed" });
-      return null;
-    } finally {
       setIsLoading(false);
+      return null;
     }
-  }, [fetchProfile, refreshToken]);
+  }, [refreshToken, profileQuery]);
+
+  // Sync profile query data with user state
+  useEffect(() => {
+    if (profileQuery.data) {
+      setUser(profileQuery.data);
+    } else if (profileQuery.error) {
+      setError({ message: "Failed to fetch profile" });
+    }
+  }, [profileQuery.data, profileQuery.error]);
 
   const login = useCallback(
     async (data: LoginFormData): Promise<AuthResponse> => {
-      const authData = await loginRequest(data);
-      setAccessToken(authData.accessToken);
-      setAuthHeader(authData.accessToken);
-      setUser(authData.user);
-      setError(null);
-      return authData;
+      try {
+        const authData = await loginMutation.mutateAsync(data);
+        setAccessToken(authData.accessToken);
+        setAuthHeader(authData.accessToken);
+        setUser(authData.user);
+        setProfileEnabled(true);
+        setError(null);
+        return authData;
+      } catch (err) {
+        const authError: AuthError = {
+          message: err instanceof Error ? err.message : "Login failed",
+        };
+        setError(authError);
+        throw err;
+      }
     },
-    []
+    [loginMutation]
   );
 
   const register = useCallback(
     async (data: RegisterFormData): Promise<AuthResponse> => {
-      const authData = await registerRequest(data);
-      setAccessToken(authData.accessToken);
-      setAuthHeader(authData.accessToken);
-      setUser(authData.user);
-      setError(null);
-      return authData;
+      try {
+        const authData = await registerMutation.mutateAsync(data);
+        setAccessToken(authData.accessToken);
+        setAuthHeader(authData.accessToken);
+        setUser(authData.user);
+        setProfileEnabled(true);
+        setError(null);
+        return authData;
+      } catch (err) {
+        const authError: AuthError = {
+          message: err instanceof Error ? err.message : "Registration failed",
+        };
+        setError(authError);
+        throw err;
+      }
     },
-    []
+    [registerMutation]
   );
 
   const logout = useCallback(async () => {
     try {
-      await logoutRequest();
+      await logoutMutation.mutateAsync();
     } catch (logoutError) {
       // Proceed with client cleanup even if server logout fails
       console.error("Logout error:", logoutError);
     } finally {
       setAccessToken(null);
       setUser(null);
+      setProfileEnabled(false);
       clearAuthHeader();
       setError(null);
       if (window.location.pathname !== "/") {
         navigate("/", { replace: true });
       }
     }
-  }, [navigate]);
+  }, [navigate, logoutMutation]);
 
   const updateUser = useCallback(
     async (data: UpdateProfileFormData): Promise<User> => {
-      const updated = await updateProfileRequest(data);
-      setUser(updated);
-      return updated;
+      try {
+        const updated = await updateProfileMutation.mutateAsync(data);
+        setUser(updated);
+        return updated;
+      } catch (err) {
+        const authError: AuthError = {
+          message: err instanceof Error ? err.message : "Update failed",
+        };
+        setError(authError);
+        throw err;
+      }
     },
-    []
+    [updateProfileMutation]
   );
 
   useEffect(() => {

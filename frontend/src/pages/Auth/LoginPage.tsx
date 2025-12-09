@@ -6,11 +6,11 @@ import Input from "../../components/ui/Input";
 import Button from "../../components/ui/Button";
 import { loginSchema, type LoginFormData } from "../../schemas/authSchemas";
 import type { AuthError } from "../../types/auth";
-import { useLogin } from "../../hooks/useAuth";
+import { useLoginMutation } from "../../api/services/auth-service";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const loginMutation = useLogin();
+  const loginMutation = useLoginMutation();
 
   const { handleSubmit, control } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),

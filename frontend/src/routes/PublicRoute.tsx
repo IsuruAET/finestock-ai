@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/AuthContext";
 import PageLoader from "../components/Loader/PageLoader";
 
 interface PublicRouteProps {
@@ -8,7 +8,7 @@ interface PublicRouteProps {
 
 const PublicRoute = ({ children }: PublicRouteProps) => {
   const location = useLocation();
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const { user, isLoading, isAuthenticated } = useAuthContext();
 
   if (isLoading) {
     return <PageLoader />;
