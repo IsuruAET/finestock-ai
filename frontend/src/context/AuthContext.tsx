@@ -1,10 +1,23 @@
 import { createContext, useContext } from "react";
-import type { User } from "../hooks/useAuth";
+import type { AuthError, AuthResponse, User } from "../types/auth";
+import type {
+  LoginFormData,
+  RegisterFormData,
+  UpdateProfileFormData,
+} from "../schemas/authSchemas";
 
-interface AuthContextType {
-  user: User | undefined;
+export interface AuthContextType {
+  user: User | null;
   isLoading: boolean;
-  handleLogout: () => void;
+  loading: boolean;
+  isAuthenticated: boolean;
+  error: AuthError | null;
+  login: (data: LoginFormData) => Promise<AuthResponse>;
+  register: (data: RegisterFormData) => Promise<AuthResponse>;
+  logout: () => Promise<void>;
+  refreshToken: () => Promise<string | null>;
+  updateUser: (data: UpdateProfileFormData) => Promise<User>;
+  checkAuthStatus: () => Promise<User | null>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(

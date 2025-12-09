@@ -1,110 +1,134 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "../utils/axioInstance";
 import { API_PATHS } from "../utils/apiPaths";
-import type { LoginFormData, RegisterFormData } from "../schemas/authSchemas";
-import axios from "axios";
+import { useAuthContext } from "../context/AuthContext";
+import type { AuthError, AuthResponse, User } from "../types/auth";
+import type {
+  LoginFormData,
+  RegisterFormData,
+  UpdateProfileFormData,
+} from "../schemas/authSchemas";
 
-export interface User {
-  _id: string;
-  fullName: string;
-  email: string;
-  profileImageUrl?: string;
-}
+const AUTH_QUERY_KEYS = {
+  profile: ["auth", "profile"] as const,
+};
 
-interface AuthResponse {
-  id: string;
-  user: User;
-  token: string;
-}
+export const refreshTokenRequest = async (): Promise<string> => {
+  const response = await axiosInstance.post<{ accessToken: string }>(
+    API_PATHS.AUTH.REFRESH_TOKEN,
+    {}
+  );
+  return response.data.accessToken;
+};
 
-interface AuthError {
-  message: string;
-}
+export const fetchProfileRequest = async (): Promise<User> => {
+  const response = await axiosInstance.get<User>(API_PATHS.AUTH.GET_PROFILE);
+  return response.data;
+};
 
-// Login mutation
+export const loginRequest = async (
+  data: LoginFormData
+): Promise<AuthResponse> => {
+  const response = await axiosInstance.post<AuthResponse>(
+    API_PATHS.AUTH.LOGIN,
+    data
+  );
+  return response.data;
+};
+
+export const registerRequest = async (
+  data: RegisterFormData
+): Promise<AuthResponse> => {
+  const response = await axiosInstance.post<AuthResponse>(
+    API_PATHS.AUTH.REGISTER,
+    data
+  );
+  return response.data;
+};
+
+export const logoutRequest = async () => {
+  await axiosInstance.post(API_PATHS.AUTH.LOGOUT, {});
+};
+
+export const updateProfileRequest = async (
+  data: UpdateProfileFormData
+): Promise<User> => {
+  const response = await axiosInstance.put<User>(
+    API_PATHS.AUTH.UPDATE_PROFILE,
+    data
+  );
+  return response.data;
+};
+
+export const useAuth = () => useAuthContext();
+
 export const useLogin = () => {
+  const { login } = useAuthContext();
   const queryClient = useQueryClient();
 
   return useMutation<AuthResponse, AuthError, LoginFormData>({
-    mutationFn: async (data: LoginFormData) => {
-      const response = await axiosInstance.post<AuthResponse>(
-        API_PATHS.AUTH.LOGIN,
-        data
-      );
-      return response.data;
-    },
+    mutationKey: ["auth", "login"],
+    mutationFn: login,
     onSuccess: (data) => {
-      // Store token
-      localStorage.setItem("token", data.token);
-
-      // Set user data in query cache to prevent refetching
-      queryClient.setQueryData(["user"], data.user);
-
-      // Invalidate and refetch user-related queries if needed
-      // But we set the data above, so it won't refetch unnecessarily
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        throw {
-          message:
-            error.response?.data?.message ||
-            "Something went wrong. Please try again.",
-        };
-      }
-      throw { message: "Something went wrong. Please try again." };
+      queryClient.setQueryData(AUTH_QUERY_KEYS.profile, data.user);
     },
   });
 };
 
-// Register mutation
 export const useRegister = () => {
+  const { register } = useAuthContext();
   const queryClient = useQueryClient();
 
   return useMutation<AuthResponse, AuthError, RegisterFormData>({
-    mutationFn: async (data: RegisterFormData) => {
-      const response = await axiosInstance.post<AuthResponse>(
-        API_PATHS.AUTH.REGISTER,
-        data
-      );
-      return response.data;
-    },
+    mutationKey: ["auth", "register"],
+    mutationFn: register,
     onSuccess: (data) => {
-      // Store token
-      localStorage.setItem("token", data.token);
-
-      // Set user data in query cache to prevent refetching
-      queryClient.setQueryData(["user"], data.user);
-
-      // Invalidate and refetch user-related queries if needed
-      // But we set the data above, so it won't refetch unnecessarily
-    },
-    onError: (error) => {
-      if (axios.isAxiosError(error)) {
-        throw {
-          message:
-            error.response?.data?.message ||
-            "Something went wrong. Please try again.",
-        };
-      }
-      throw { message: "Something went wrong. Please try again." };
+      queryClient.setQueryData(AUTH_QUERY_KEYS.profile, data.user);
     },
   });
 };
 
-// Get user info query
-export const useGetUserInfo = () => {
-  const token = localStorage.getItem("token");
+export const useLogout = () => {
+  const { logout } = useAuthContext();
+  const queryClient = useQueryClient();
 
-  return useQuery<User>({
-    queryKey: ["user"],
-    queryFn: async () => {
-      const response = await axiosInstance.get<User>(
-        API_PATHS.AUTH.GET_USER_INFO
-      );
-      return response.data;
+  return useMutation<void, AuthError>({
+    mutationKey: ["auth", "logout"],
+    mutationFn: logout,
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: ["auth"] });
     },
-    enabled: !!token, // Only run if token exists
-    retry: false, // Don't retry on failure (will handle redirect)
-    staleTime: Infinity, // Consider data fresh forever (until manual invalidation)
+  });
+};
+
+export const useGetProfile = () => {
+  const { user, isLoading, error, checkAuthStatus } = useAuthContext();
+
+  const profileQuery = useQuery<User | null, AuthError>({
+    queryKey: AUTH_QUERY_KEYS.profile,
+    queryFn: checkAuthStatus,
+    initialData: user ?? undefined,
+    enabled: true,
+  });
+
+  return {
+    data: profileQuery.data ?? undefined,
+    isLoading: isLoading || profileQuery.isLoading,
+    isFetching: profileQuery.isFetching,
+    error: error ?? profileQuery.error ?? null,
+    refetch: profileQuery.refetch,
+  };
+};
+
+export const useUpdateProfile = () => {
+  const { updateUser } = useAuthContext();
+  const queryClient = useQueryClient();
+
+  return useMutation<User, AuthError, UpdateProfileFormData>({
+    mutationKey: ["auth", "updateProfile"],
+    mutationFn: updateUser,
+    onSuccess: (updatedUser) => {
+      queryClient.setQueryData(AUTH_QUERY_KEYS.profile, updatedUser);
+    },
   });
 };
