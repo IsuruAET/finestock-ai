@@ -6,10 +6,10 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="py-20 lg:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
             What Our Customers Say
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base text-gray-600 max-w-3xl mx-auto">
             Hear from real businesses who have transformed their supply
             management with our AI-powered tools.
           </p>
@@ -23,7 +23,7 @@ const TestimonialsSection = () => {
               <div className="absolute -top-4 left-8 w-8 h-8 bg-linear-to-br from-blue-950 to-blue-900 rounded-full flex items-center justify-center text-white">
                 <Quote className="w-5 h-5" />
               </div>
-              <p className="text-gray-700 leading-relaxed mb-6 italic text-lg">
+              <p className="text-base text-gray-700 leading-relaxed mb-6 italic">
                 {testimonial.quote}
               </p>
               <div className="flex items-center space-x-4">

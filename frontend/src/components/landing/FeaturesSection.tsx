@@ -6,10 +6,10 @@ const FeaturesSection = () => {
     <section id="features" className="py-20 lg:py-28 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-4">
             Powerful Features to Run Your Business
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base text-gray-600 max-w-3xl mx-auto">
             Everything you need to manage your supply requests and streamline
             your procurement.
           </p>

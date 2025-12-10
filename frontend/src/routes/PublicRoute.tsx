@@ -11,8 +11,7 @@ const PublicRoute = ({ children }: { children?: React.ReactNode }) => {
   }
 
   if (isAuthenticated && user) {
-    const from =
-      (location.state as { from?: Location })?.from?.pathname || "/dashboard";
+    const from = (location.state as { from?: Location })?.from?.pathname || "/";
     return <Navigate to={from} replace />;
   }
 

@@ -7,9 +7,9 @@ import TestimonialsSection from "../../components/landing/TestimonialsSection";
 
 const LandingPage = () => {
   return (
-    <div className="bg-white text-gray-600">
+    <div className="bg-white text-gray-600 min-h-screen">
       <Header />
-      <main>
+      <main className="pt-16 lg:pt-20">
         <HeroSection />
         <FeaturesSection />
         <TestimonialsSection />
