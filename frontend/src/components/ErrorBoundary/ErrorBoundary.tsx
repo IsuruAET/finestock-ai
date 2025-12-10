@@ -41,22 +41,22 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+      <div className="page-container">
+        <div className="page-card">
           <div>
-            <div className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center">
+            <div className="page-logo">
               <AlertCircle className="w-6 h-6 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-center text-gray-900">
+            <h2 className="page-title">
               Something went wrong
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="page-subtitle">
               {this.state.error?.message ||
                 "We hit an unexpected error. You can try again or head back home."}
             </p>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4 mt-8">
             <Button
               onClick={this.handleReset}
               variant="primary"

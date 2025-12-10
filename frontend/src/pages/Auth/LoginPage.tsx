@@ -37,24 +37,22 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+    <div className="page-container">
+      <div className="page-card">
         <div>
-          <div
-            className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center cursor-pointer"
-            onClick={() => navigate("/")}
-          >
+          <div className="page-logo" onClick={() => navigate("/")}>
             <FileText className="w-6 h-6 text-white" />
           </div>
-          <h2 className="text-3xl font-bold text-center text-gray-900">
-            Login to your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <h2 className="page-title">Login to your account</h2>
+          <p className="page-subtitle">
             Welcome back to Supply Request Generator
           </p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-5 sm:space-y-6"
+        >
           <Input
             name="email"
             icon={<Mail className="w-4 h-4 text-gray-500" />}
@@ -81,7 +79,7 @@ const LoginPage = () => {
             type="submit"
             variant="primary"
             size="lg"
-            className="btn-primary w-full"
+            className="btn-primary w-full mt-6"
             isLoading={loginMutation.isPending}
             disabled={loginMutation.isPending}
           >

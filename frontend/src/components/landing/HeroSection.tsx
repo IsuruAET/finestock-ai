@@ -8,45 +8,45 @@ const HeroSection = () => {
   return (
     <section className="relative bg-[#fbfbfb] overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/[0.05] bg-size-[60px_60px]"></div>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 xl:py-32">
         <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl font-extrabold text-blue-950 leading-tight mb-6">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-blue-950 leading-tight mb-4 sm:mb-6">
             AI-Powered Supply Requests, Made Effortless
           </h1>
-          <p className="text-base text-gray-700 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-700 mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto px-4 sm:px-0">
             Let our AI handle your supply requests, track inventory
             automatically, generate order reminders, and provide smart insights
             to help you manage your procurement efficiently.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4 sm:px-0">
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="btn-primary w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl hover:scale-105 "
+                className="btn-primary w-full sm:w-auto border-2 border-black px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 rounded-xl hover:scale-105 transition-all duration-200 text-sm sm:text-base"
               >
                 Go to Dashboard
               </Link>
             ) : (
               <Link
                 to="/signup"
-                className="btn-primary w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl hover:scale-105"
+                className="btn-primary w-full sm:w-auto border-2 border-black px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 rounded-xl hover:scale-105 transition-all duration-200 text-sm sm:text-base"
               >
                 Get Started for Free
               </Link>
             )}
             <a
               href="#features"
-              className="w-full sm:w-auto border-2 border-black text-black px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-bold text-base hover:bg-white hover:text-black transition-all duration-200 hover:scale-105 text-center"
+              className="w-full sm:w-auto border-2 border-black text-black px-5 sm:px-6 lg:px-8 py-2.5 sm:py-3 lg:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-white hover:text-black transition-all duration-200 hover:scale-105 text-center"
             >
               Learn More
             </a>
           </div>
         </div>
-        <div className="mt-12 sm:mt-16 relative max-w-5xl mx-auto px-4 sm:px-0">
+        <div className="mt-10 sm:mt-12 lg:mt-16 relative max-w-5xl mx-auto px-4 sm:px-0">
           <img
             src={heroImg}
             alt="hero-img"
-            className="w-full h-auto rounded-2xl shadow-2xl shadow-gray-300 border-4 border-gray-200/20"
+            className="w-full h-auto rounded-xl sm:rounded-2xl shadow-2xl shadow-gray-300 border-2 sm:border-4 border-gray-200/20"
           />
         </div>
       </div>
