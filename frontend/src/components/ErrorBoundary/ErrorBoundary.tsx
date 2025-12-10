@@ -1,4 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { AlertCircle, Home, RotateCcw } from "lucide-react";
+import Button from "../ui/Button";
+import FSLink from "../ui/FSLink";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -38,52 +41,50 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     }
 
     return (
-      <div className="fixed inset-0 bg-[#f7f7f8] text-gray-700 px-4 py-8">
-        <div className="mx-auto flex h-full max-w-xl items-center">
-          <div className="w-full rounded-2xl border border-[#e5e7eb] bg-white shadow-[0_18px_45px_-18px_rgba(17,24,39,0.2)] p-8">
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-50 text-[#FF9324]">
-                <span className="text-2xl" aria-hidden>
-                  ⚠️
-                </span>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.08em] text-primary">
-                  Finestock AI
-                </p>
-                <h2 className="text-2xl font-semibold text-gray-900">
-                  Something went wrong
-                </h2>
-              </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
+          <div>
+            <div className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center">
+              <AlertCircle className="w-6 h-6 text-white" />
             </div>
-
-            <p className="mt-4 text-sm text-gray-800 leading-relaxed">
+            <h2 className="text-3xl font-bold text-center text-gray-900">
+              Something went wrong
+            </h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
               {this.state.error?.message ||
                 "We hit an unexpected error. You can try again or head back home."}
             </p>
+          </div>
 
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={this.handleReset}
-                className="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              >
-                Try again
-              </button>
-              <button
-                onClick={() => (window.location.href = "/")}
-                className="inline-flex items-center justify-center rounded-lg border border-[#e5e7eb] bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-[#f1f5f9] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
-              >
-                Go home
-              </button>
-            </div>
+          <div className="space-y-4">
+            <Button
+              onClick={this.handleReset}
+              variant="primary"
+              size="lg"
+              className="btn-primary w-full"
+              icon={RotateCcw}
+            >
+              Try again
+            </Button>
+            <Button
+              onClick={() => (window.location.href = "/")}
+              variant="outline"
+              size="lg"
+              className="w-full"
+              icon={Home}
+            >
+              Go home
+            </Button>
+          </div>
 
-            <div className="mt-6 rounded-xl border border-dashed border-[#e2e8f0] bg-[#f8fafc] px-4 py-3 text-xs text-gray-700">
-              <p className="font-semibold">Debug details</p>
-              <p className="mt-1 wrap-break-word">
-                {this.state.error?.name || "Error"} —{" "}
-                {this.state.error?.message || "Unexpected error"}
-              </p>
-            </div>
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <p className="text-xs font-semibold text-gray-700 mb-2">
+              Debug details
+            </p>
+            <p className="text-xs text-gray-600 break-words">
+              {this.state.error?.name || "Error"} —{" "}
+              {this.state.error?.message || "Unexpected error"}
+            </p>
           </div>
         </div>
       </div>

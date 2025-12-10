@@ -8,8 +8,10 @@ import { loginSchema, type LoginFormData } from "../../schemas/authSchemas";
 import type { AuthError } from "../../types/auth";
 import { useLoginMutation } from "../../api/services/auth-service";
 import { ArrowRight, FileText, Mail, Lock } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const loginMutation = useLoginMutation();
 
   const { handleSubmit, control } = useForm<LoginFormData>({
@@ -38,7 +40,10 @@ const LoginPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
-          <div className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center">
+          <div
+            className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <FileText className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-center text-gray-900">
@@ -76,7 +81,7 @@ const LoginPage = () => {
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full"
+            className="btn-primary w-full"
             isLoading={loginMutation.isPending}
             disabled={loginMutation.isPending}
           >

@@ -12,8 +12,10 @@ import {
 import type { AuthError } from "../../types/auth";
 import { useRegisterMutation } from "../../api/services/auth-service";
 import { FileText, Mail, Lock, User, LogIn } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const registerMutation = useRegisterMutation();
 
   const { handleSubmit, control } = useForm<RegisterFormData>({
@@ -45,7 +47,10 @@ const SignUpPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
-          <div className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center">
+          <div
+            className="w-12 h-12 bg-linear-to-r from-blue-950 to-blue-900 rounded-xl mx-auto mb-6 flex items-center justify-center cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <FileText className="w-6 h-6 text-white" />
           </div>
           <h2 className="text-3xl font-bold text-center text-gray-900">
@@ -135,7 +140,7 @@ const SignUpPage = () => {
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full"
+            className="btn-primary w-full"
             isLoading={registerMutation.isPending}
             disabled={registerMutation.isPending}
           >

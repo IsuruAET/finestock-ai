@@ -31,7 +31,10 @@ const Header = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          <div className="flex items-center space-x-2">
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <div className="w-8 h-8 bg-blue-900 rounded-md flex items-center justify-center">
               <FileText className="w-4 h-4 text-white" />
             </div>
@@ -82,7 +85,7 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="bg-linear-to-r from-blue-950 to-blue-900 hover:bg-gray-800 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                  className="btn-primary px-6 py-2.5 rounded-lg"
                 >
                   Sign Up
                 </Link>
@@ -145,7 +148,7 @@ const Header = () => {
                 </Link>
                 <Link
                   to="/signup"
-                  className="block w-full text-left bg-gray-900 hover:bg-gray-800 text-white px-4 py-3 rounded-lg font-medium transition-colors duration-200"
+                  className="btn-primary block w-full text-left px-4 py-3 rounded-lg"
                 >
                   Sign Up
                 </Link>
