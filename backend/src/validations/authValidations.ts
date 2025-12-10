@@ -20,23 +20,32 @@ export const mongoIdSchema = z
 
 // Auth validation schemas
 export const registerSchema = z.object({
-  body: z.object({
-    fullName: fullNameSchema,
-    email: emailSchema,
-    password: passwordSchema,
-  }).strict(),
+  body: z
+    .object({
+      fullName: fullNameSchema,
+      email: emailSchema,
+      password: passwordSchema,
+    })
+    .strict(),
 });
 
 export const loginSchema = z.object({
-  body: z.object({
-    email: emailSchema,
-    password: z.string().min(1, "Password is required"),
-  }).strict(),
+  body: z
+    .object({
+      email: emailSchema,
+      password: z.string().min(1, "Password is required"),
+    })
+    .strict(),
 });
 
 export const updateProfileSchema = z.object({
-  body: z.object({
-    fullName: fullNameSchema.optional(),
-    profileImageUrl: z.url("Invalid URL format").optional().nullable(),
-  }).strict(),
+  body: z
+    .object({
+      fullName: fullNameSchema.optional(),
+      businessName: z.string().optional().nullable(),
+      address: z.string().optional().nullable(),
+      phone: z.string().optional().nullable(),
+      profileImageUrl: z.url("Invalid URL format").optional().nullable(),
+    })
+    .strict(),
 });

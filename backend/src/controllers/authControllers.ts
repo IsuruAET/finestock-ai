@@ -168,10 +168,14 @@ export const updateProfile = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    const { fullName, profileImageUrl } = req.body;
+    const { fullName, businessName, address, phone, profileImageUrl } =
+      req.body;
 
     const updatedUser = await authService.updateProfile(String(req.user._id), {
       fullName,
+      businessName,
+      address,
+      phone,
       profileImageUrl,
     });
 

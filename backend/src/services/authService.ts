@@ -99,8 +99,9 @@ export class AuthService {
   async refreshAccessToken(
     refreshToken: string
   ): Promise<RefreshTokenResponse> {
-    const { session, reused } =
-      await sessionRepository.findByRefreshToken(refreshToken);
+    const { session, reused } = await sessionRepository.findByRefreshToken(
+      refreshToken
+    );
 
     if (!session || session.expiresAt < new Date()) {
       if (session) {
@@ -137,7 +138,13 @@ export class AuthService {
 
   async updateProfile(
     userId: string,
-    data: { fullName?: string; profileImageUrl?: string | null }
+    data: {
+      fullName?: string;
+      businessName?: string | null;
+      address?: string | null;
+      phone?: string | null;
+      profileImageUrl?: string | null;
+    }
   ): Promise<IUser | null> {
     return await userRepository.update(userId, data);
   }

@@ -24,11 +24,9 @@ export const registerSchema = z
         "Password must contain at least one uppercase letter, one lowercase letter, and one number"
       ),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    acceptTerms: z
-      .boolean()
-      .refine((val) => val === true, {
-        message: "You must agree to the Terms of Service and Privacy Policy",
-      }),
+    acceptTerms: z.boolean().refine((val) => val === true, {
+      message: "You must agree to the Terms of Service and Privacy Policy",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -41,7 +39,10 @@ export const updateProfileSchema = z.object({
     .min(1, "Full name is required")
     .min(2, "Full name must be at least 2 characters")
     .optional(),
-  profileImageUrl: z.string().optional(),
+  businessName: z.string().optional().nullable(),
+  address: z.string().optional().nullable(),
+  phone: z.string().optional().nullable(),
+  profileImageUrl: z.string().optional().nullable(),
 });
 
 export type LoginFormData = z.infer<typeof loginSchema>;

@@ -7,6 +7,7 @@ import { setupGracefulShutdown } from "./utils/shutdown";
 import { logger } from "./utils/logger";
 import authRoutes from "./routes/authRoutes";
 import imageRoutes from "./routes/imageRoutes";
+import purchaseOrderRoutes from "./routes/purchaseOrderRoutes";
 import { errorHandler, notFoundHandler } from "./middleware/errorMiddleware";
 import { requestLogger } from "./middleware/loggingMiddleware";
 
@@ -49,6 +50,7 @@ connectDB().catch((err) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/images", imageRoutes);
+app.use("/api/v1/purchase-orders", purchaseOrderRoutes);
 
 // 404 handler - must be after all routes
 app.use(notFoundHandler);

@@ -9,6 +9,9 @@ export interface IUser extends Document {
   fullName: string;
   email: string;
   password: string;
+  businessName?: string | null;
+  address?: string | null;
+  phone?: string | null;
   profileImageUrl?: string | null;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -37,4 +40,50 @@ export interface ISession extends Document {
   createdAt: Date;
   compareRefreshToken(candidateToken: string): Promise<boolean>;
   comparePreviousRefreshToken(candidateToken: string): Promise<boolean>;
+}
+
+// Purchase Order Model
+export interface IPurchaseOrderItem {
+  name: string;
+  description?: string;
+  quantity: number;
+  unitPrice: number;
+  taxPercent?: number;
+  total: number;
+}
+
+export interface IPurchaseOrder extends Document {
+  user: mongoose.Types.ObjectId;
+  poNumber: string;
+  orderDate: Date;
+  expectedDeliveryDate?: Date;
+  vendor?: {
+    companyName?: string;
+    contactName?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+  };
+  shipTo?: {
+    companyName?: string;
+    contactName?: string;
+    address?: string;
+    phone?: string;
+    email?: string;
+  };
+  items: IPurchaseOrderItem[];
+  notes?: string;
+  paymentTerms?: string;
+  status:
+    | "DRAFT"
+    | "PENDING_APPROVAL"
+    | "APPROVED"
+    | "ORDERED"
+    | "RECEIVED"
+    | "CANCELLED";
+  subtotal: number;
+  totalTax: number;
+  totalAmount: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

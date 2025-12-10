@@ -21,7 +21,12 @@ export class UserRepository {
 
   async update(
     id: string,
-    updateData: Partial<Pick<IUser, "fullName" | "profileImageUrl">>
+    updateData: Partial<
+      Pick<
+        IUser,
+        "fullName" | "businessName" | "address" | "phone" | "profileImageUrl"
+      >
+    >
   ): Promise<IUser | null> {
     return await User.findByIdAndUpdate(
       id,
@@ -32,4 +37,3 @@ export class UserRepository {
 }
 
 export default new UserRepository();
-

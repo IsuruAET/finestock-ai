@@ -2,7 +2,10 @@ export interface User {
   _id: string;
   fullName: string;
   email: string;
-  profileImageUrl?: string;
+  businessName?: string | null;
+  address?: string | null;
+  phone?: string | null;
+  profileImageUrl?: string | null;
 }
 
 export interface AuthResponse {
