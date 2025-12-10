@@ -11,14 +11,14 @@ const SignUpPage = lazy(() => import("../pages/Auth/SignUpPage"));
 const LoginPage = lazy(() => import("../pages/Auth/LoginPage"));
 // Protected routes
 const DashboardPage = lazy(() => import("../pages/Dashboard/DashboardPage"));
-const SupplyRequestPage = lazy(
-  () => import("../pages/SupplyRequest/SupplyRequestPage")
+const PurchaseOrderPage = lazy(
+  () => import("../pages/PurchaseOrder/PurchaseOrderPage")
 );
-const CreateSupplyRequest = lazy(
-  () => import("../pages/SupplyRequest/CreateSupplyRequest")
+const CreatePurchaseOrder = lazy(
+  () => import("../pages/PurchaseOrder/CreatePurchaseOrder")
 );
-const SupplyRequestDetail = lazy(
-  () => import("../pages/SupplyRequest/SupplyRequestDetail")
+const PurchaseOrderDetail = lazy(
+  () => import("../pages/PurchaseOrder/PurchaseOrderDetail")
 );
 const ProfilePage = lazy(() => import("../pages/Profile/ProfilePage"));
 const NotFound = lazy(() => import("../pages/NotFound"));
@@ -41,10 +41,10 @@ const AppRoutes = () => {
           {/* Dashboard routes */}
           <Route path="/dashboard" element={<DashboardPage />} />
 
-          {/* Supply request routes */}
-          <Route path="/supply-request" element={<SupplyRequestPage />} />
-          <Route path="/supply-request/new" element={<CreateSupplyRequest />} />
-          <Route path="/supply-request/:id" element={<SupplyRequestDetail />} />
+          {/* Purchase order routes */}
+          <Route path="/purchase-order" element={<PurchaseOrderPage />} />
+          <Route path="/purchase-order/new" element={<CreatePurchaseOrder />} />
+          <Route path="/purchase-order/:id" element={<PurchaseOrderDetail />} />
 
           {/* Profile routes */}
           <Route path="/profile" element={<ProfilePage />} />

@@ -3,27 +3,27 @@ import { BarChart2, FileText, Mail, Sparkles } from "lucide-react";
 export const APP_FEATURES = [
   {
     icon: Sparkles,
-    title: "AI-Powered Supply Requests",
+    title: "AI-Powered Purchase Orders",
     description:
-      "Paste any text, email, or receipt and let our AI instantly create a complete, professional supply request for your team.",
+      "Paste any text, email, or receipt and let our AI instantly create a complete, professional purchase order for your team.",
   },
   {
     icon: BarChart2,
     title: "AI-Powered Dashboard",
     description:
-      "Get smart, actionable insights about your supply requests and inventory, generated automatically by our AI analyst.",
+      "Get smart, actionable insights about your purchase orders and inventory, generated automatically by our AI analyst.",
   },
   {
     icon: Mail,
     title: "AI-Powered Order Reminders",
     description:
-      "Automatically generate polite and effective reminders for pending supply orders with a single click.",
+      "Automatically generate polite and effective reminders for pending purchase orders with a single click.",
   },
   {
     icon: FileText,
-    title: "Easy Supply Tracking",
+    title: "Easy Order Tracking",
     description:
-      "Easily manage all your supply requests, track order statuses, and send reminders for pending approvals or deliveries.",
+      "Easily manage all your purchase orders, track order statuses, and send reminders for pending approvals or deliveries.",
   },
 ];
 
@@ -60,17 +60,17 @@ export const FAQS: FAQ[] = [
   {
     question: "What is FineStock AI?",
     answer:
-      "FineStock AI is an intelligent supply request and inventory management platform that uses AI to automate the creation, tracking, and management of supply requests. It transforms unstructured text, emails, or receipts into professional supply requests instantly.",
+      "FineStock AI is an intelligent purchase order and inventory management platform that uses AI to automate the creation, tracking, and management of purchase orders. It transforms unstructured text, emails, or receipts into professional purchase orders instantly.",
   },
   {
-    question: "How does the AI generate supply requests?",
+    question: "How does the AI generate purchase orders?",
     answer:
-      "Simply paste any text, email, or upload a receipt. Our AI analyzes the content, extracts relevant details like item names, quantities, and specifications, then automatically creates a complete, formatted supply request ready for approval.",
+      "Simply paste any text, email, or upload a receipt. Our AI analyzes the content, extracts relevant details like item names, quantities, and specifications, then automatically creates a complete, formatted purchase order ready for approval.",
   },
   {
     question: "What kind of insights does the AI dashboard provide?",
     answer:
-      "The AI dashboard analyzes your supply requests and inventory patterns to provide actionable insights such as spending trends, approval bottlenecks, frequently requested items, and recommendations for bulk ordering or vendor negotiations.",
+      "The AI dashboard analyzes your purchase orders and inventory patterns to provide actionable insights such as spending trends, approval bottlenecks, frequently requested items, and recommendations for bulk ordering or vendor negotiations.",
   },
   {
     question: "Can I integrate FineStock AI with existing systems?",
@@ -80,7 +80,7 @@ export const FAQS: FAQ[] = [
   {
     question: "Is my data secure?",
     answer:
-      "Absolutely. We use enterprise-grade encryption, secure cloud storage, and follow industry best practices for data protection. Your supply requests and inventory data are encrypted both in transit and at rest.",
+      "Absolutely. We use enterprise-grade encryption, secure cloud storage, and follow industry best practices for data protection. Your purchase orders and inventory data are encrypted both in transit and at rest.",
   },
   {
     question: "How do the AI-powered order reminders work?",

@@ -57,7 +57,7 @@ const SignUpPage = () => {
             Create an Account
           </h2>
           <p className="page-subtitle">
-            Join Supply Request Generator today
+            Join Purchase Order Generator today
           </p>
         </div>
 

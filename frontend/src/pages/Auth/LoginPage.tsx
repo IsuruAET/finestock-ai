@@ -45,7 +45,7 @@ const LoginPage = () => {
           </div>
           <h2 className="page-title">Login to your account</h2>
           <p className="page-subtitle">
-            Welcome back to Supply Request Generator
+            Welcome back to Purchase Order Generator
           </p>
         </div>
 

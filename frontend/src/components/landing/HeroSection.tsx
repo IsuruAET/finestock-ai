@@ -11,10 +11,10 @@ const HeroSection = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-24 xl:py-32">
         <div className="text-center max-w-4xl mx-auto">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-blue-950 leading-tight mb-4 sm:mb-6">
-            AI-Powered Supply Requests, Made Effortless
+            AI-Powered Purchase Orders, Made Effortless
           </h1>
           <p className="text-sm sm:text-base text-gray-700 mb-6 sm:mb-8 leading-relaxed max-w-3xl mx-auto px-4 sm:px-0">
-            Let our AI handle your supply requests, track inventory
+            Let our AI handle your purchase orders, track inventory
             automatically, generate order reminders, and provide smart insights
             to help you manage your procurement efficiently.
           </p>

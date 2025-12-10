@@ -10,7 +10,7 @@ const FeaturesSection = () => {
             Powerful Features to Run Your Business
           </h2>
           <p className="text-base text-gray-600 max-w-3xl mx-auto">
-            Everything you need to manage your supply requests and streamline
+            Everything you need to manage your purchase orders and streamline
             your procurement.
           </p>
         </div>

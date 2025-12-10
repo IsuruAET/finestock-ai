@@ -59,11 +59,11 @@ const Footer = () => {
                 <FileText className="w-4 h-4 text-white" />
               </div>
               <span className="text-xl font-bold">
-                AI Powered Supply Requests
+                AI Powered Purchase Orders
               </span>
             </Link>
             <p className="text-gray-400 leading-relaxed max-w-sm">
-              The simplest way to create and send professional supply requests.
+              The simplest way to create and send professional purchase orders.
             </p>
           </div>
           <div>

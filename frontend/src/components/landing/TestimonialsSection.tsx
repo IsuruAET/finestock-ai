@@ -10,7 +10,7 @@ const TestimonialsSection = () => {
             What Our Customers Say
           </h2>
           <p className="text-base text-gray-600 max-w-3xl mx-auto">
-            Hear from real businesses who have transformed their supply
+            Hear from real businesses who have transformed their purchase order
             management with our AI-powered tools.
           </p>
         </div>

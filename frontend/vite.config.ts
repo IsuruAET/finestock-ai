@@ -15,7 +15,7 @@ export default defineConfig({
         name: "FineStock AI",
         short_name: "FineStock AI",
         description:
-          "FineStock AI is an AI-powered system that predicts supply needs, streamlines request workflows, automates approvals, reduces delays, and ensures accurate, real-time inventory management.",
+          "FineStock AI is an AI-powered system that predicts purchase needs, streamlines purchase order workflows, automates approvals, reduces delays, and ensures accurate, real-time inventory management.",
         theme_color: "#1B3182",
         background_color: "#fcfcfc",
         display: "standalone",
